@@ -5,9 +5,8 @@
 
 
 
-
 int main(void){
-	
+
 	leeFichero("",NULL);
 	printf("Hola mundo!\n");
 

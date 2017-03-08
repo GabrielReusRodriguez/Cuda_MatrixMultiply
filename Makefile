@@ -1,10 +1,11 @@
+BIN_FOLDER = ./bin
+SRC_FOLDER = ./src
 
-BIN_FOLDER=./bin
-TMP_FOLDER=./tmp
-SRC_FOLDER=./src
+NVCC=nvcc
+NVCC_FLAGS=
+SOURCES_FILES= $(SRC_FOLDER)/MatrixMultiply.cu $(SRC_FOLDER)/FileLibs.cpp
+EXECUTABLE_FILE=$(BIN_FOLDER)/MatrixMultiply.out
+
 all:
-	gcc -c FileLibs.c
-	nvcc MatrixMultiply.cu -o MatrixMultiply.out
-	gcc -o MatrixMultiply.out FileLibs.o MatrixMultiply.o
-clean:
-	rm ./*.out
+
+	$(NVCC)  $(NVCC_FLAGS) $(SOURCES_FILES) -o $(EXECUTABLE_FILE)
