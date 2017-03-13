@@ -208,6 +208,7 @@ int main(void){
 
 	multiplica<<<dimGrid, dimBlock>>>(d_matrix_A, d_matrix_B, d_matrix_Res,p_test);
 
+  cudaDeviceSynchronize();
 	cudaMemcpy((void*)&test,(void*)p_test,sizeof(float),cudaMemcpyDeviceToHost);
 
 	//printf("TEST: %f\n",test);
