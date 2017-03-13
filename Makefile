@@ -2,8 +2,8 @@ BIN_FOLDER = ./bin
 SRC_FOLDER = ./src
 
 NVCC=nvcc
-NVCC_FLAGS=
-SOURCES_FILES= $(SRC_FOLDER)/MatrixMultiply.cu $(SRC_FOLDER)/FileLib.cpp $(SRC_FOLDER)/MemoryLib.cpp  $(SRC_FOLDER)/MatrixLib.cpp
+NVCC_FLAGS= -std=c++11
+SOURCES_FILES= $(SRC_FOLDER)/MatrixMultiply.cu $(SRC_FOLDER)/CudaFunctions.cu $(SRC_FOLDER)/FileLib.cpp $(SRC_FOLDER)/MemoryLib.cpp  $(SRC_FOLDER)/MatrixLib.cpp
 EXECUTABLE_FILE=$(BIN_FOLDER)/MatrixMultiply.out
 
 all:

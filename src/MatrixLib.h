@@ -1,8 +1,9 @@
 #ifndef MATRIX_LIB
 #define MATRIX_LIB
 
-  void calculaTamanos(int size_i_A, int size_j_A, int size_i_B, int size_j_B);
-  void printMatrix(float** Matrix,int size_i,int size_j);
+  #include "Structures.h"
 
+  int calculaTamanosMult(MatrixSize size_matrix_A, MatrixSize size_matrix_B,MatrixSize& size_matrix_res);
+  void printMatrix(Matrix matriz);
 
 #endif

@@ -1,27 +1,72 @@
 #include <stdio.h>
+#include "Constantes.h"
 #include "MatrixLib.h"
 
-
-  void calculaTamanos(int size_i_A, int size_j_A, int size_i_B,int size_j_B)
+  int calculaTamanosMult(MatrixSize size_matrix_A, MatrixSize size_matrix_B,MatrixSize& size_matrix_Res)
   {
       //comprobamos si el valor es correcto.
-  }
-  void printMatrix(float** Matrix,int size_i,int size_j)
-  {
-      if (size_i > 0 && size_j > 0)
+      if (size_matrix_A.i <= 0 || size_matrix_A.j <= 0)
       {
-        printf("Matrix %dx%d:\n",size_i,size_j);
-        for(int i = 0; i < size_i; i++)
+          return 1;
+      }
+
+      if (size_matrix_B.i <= 0 || size_matrix_B.j <= 0)
+      {
+          return 2;
+      }
+
+      if (size_matrix_A.j != size_matrix_B.i )
+      {
+        return 3;
+      }
+
+      size_matrix_Res.i = size_matrix_A.j;
+      size_matrix_Res.j = size_matrix_B.i;
+
+      return RETURN_OK;
+  }
+
+  //void printMatrix(float** Matrix,int size_i,int size_j)
+  void printMatrix(Matrix matriz)
+  {
+
+    if (matriz.size.i > 0 && matriz.size.j > 0)
+    {
+      printf("Matrix %zdx%zd:\n",matriz.size.i,matriz.size.j);
+      for(int j = 0; j < matriz.size.j; j++)
+      {
+        for ( int i=0;i< matriz.size.i - 1; i++)
         {
-          for ( int j=0;j< size_j - 1; j++)
+          //int index = i*matriz.size.j+j;
+          int index = j*matriz.size.i+i;
+          printf("%f\t",matriz.matrixValues[index]);
+        }
+          //int index = i*matriz.size.j+ matriz.size.j-1;
+          int index = j*matriz.size.i+ matriz.size.i-1;
+          printf("%f\n",matriz.matrixValues[index]);
+      }
+  }
+  else
+  {
+    printf("Tamanos de matriz = 0 o negativos");
+  }
+
+    /*
+      if (matriz.size.i > 0 && matriz.size.j > 0)
+      {
+        printf("Matrix %zdx%zd:\n",matriz.size.i,matriz.size.j);
+        for(int i = 0; i < matriz.size.i; i++)
+        {
+          for ( int j=0;j< matriz.size.j - 1; j++)
           {
-            printf("%f\t",Matrix[i][j]);
+            printf("%f\t",matriz.matrixValues[i][j]);
           }
-            printf("%f\n",Matrix[i][size_j-1]);
+            printf("%f\n",matriz.matrixValues[i][matriz.size.j-1]);
         }
     }
     else
     {
       printf("Tamanos de matriz = 0 o negativos");
     }
+    */
   }

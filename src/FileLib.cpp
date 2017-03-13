@@ -7,9 +7,15 @@
 #include "Constantes.h"
 
 
-float**  leeFichero(const char* fileName,int& size_i,int& size_j){
 
-  float** matriz = NULL;
+/*
+int escribeFichero(ConstString fileName, const Matrix matriz);
+char* creaFormatoLinea(int tamano_fila);
+*/
+//float**  leeFichero(const char* fileName,int& size_i,int& size_j){
+Matrix  leeFichero(ConstString fileName){
+
+  Matrix matriz;
   FILE *fp        =NULL;
 
   size_t len      = 0;
@@ -19,42 +25,46 @@ float**  leeFichero(const char* fileName,int& size_i,int& size_j){
   fp = fopen(fileName,"r");
   if (fp == NULL)
   {
-    return NULL;
+    return matriz;
   }
 
   read = getline(&line,&len,fp);
   if (read > 0)
   {
       //Primero leo los tamaños de la matriz
-      read = sscanf(line,"%d\t%d\n",&size_i,&size_j);
+      read = sscanf(line,"%zd\t%zd\n",&matriz.size.i,&matriz.size.j);
       if (read > 0)
       {
-        matriz=reservaMemoriaMatriz(size_i,size_j);
+        //printf("Tamano: %zd %zd\n",matriz.size.i,matriz.size.j);
+        matriz=reservaMemoriaMatriz(matriz.size);
       }
       //Si la matriz NO es null, le asigno los valores.
-      if (matriz != NULL)
+      if (matriz.matrixValues != NULL)
       {
           char* lineaProc = NULL;
-          for(int i=0;i< size_i;i++)
+          for(int j=0;j< matriz.size.j;j++)
           {
             read = getline(&line,&len,fp);
+            //printf ("Linea: %s\n",line);
             if (read > 0)
             {
               lineaProc = line;
               float value = 0.0f;
               lineaProc = strtok(line,"\t\n ");
               sscanf(lineaProc,"%f",&value);
-              matriz[i][0] = value;
-              printf("Linea: %s \n",lineaProc);
-              for(int j = 0;j<size_j-1;j++)
+              int index = j*matriz.size.i;
+              matriz.matrixValues[index] = value;
+              //printf("Linea: %s index: %d \n",lineaProc,index);
+              for(int i = 0;i<matriz.size.i-1;i++)
               {
 
                 lineaProc = strtok(NULL,"\t\n ");
                 if(lineaProc != NULL)
                 {
                   sscanf(lineaProc,"%f",&value);
-                  matriz[i][j+1] = value;
-                  printf("Linea: %s \n",lineaProc);
+                  int index_2 = j*matriz.size.i+i+1;
+                  matriz.matrixValues[index_2] = value;
+                //  printf("Linea: %s index 2:%d \n",lineaProc,index_2);
                 }
               }
 
@@ -62,46 +72,30 @@ float**  leeFichero(const char* fileName,int& size_i,int& size_j){
             else
             {
               //Error en la lectura, cierro el fichero y devuelvo null
+              //TODO en caso de error, seria conveniente liberar memoria y devolver NULL para no continuar procesando una matriz erronea.
               fclose(fp);
-              return NULL;
+              return matriz;
             }
           }
-          printMatrix(matriz,size_i,size_j);
+
+
+          printMatrix(matriz);
 
       }
   }
   else
   {
-      return NULL;
+      return matriz;
   }
 
   fclose(fp);
   return matriz;
 }
 
-int escribeFichero(const char* fileName,const float** matriz){
+int escribeFichero(ConstString fileName, const Matrix matriz){
+
+
 
   return RETURN_OK;
 
-}
-
-//Genera el string con el formato que ha de enviarse al sscanf para que lea cada fila de la matriz
-char* creaFormatoLinea(int tamano_fila){
-
-  char * formato = NULL;
-
-
-  //Cada número se define como %f\t o %f\n por lo que son 3 carácteres
-  int tamanoString = 3*tamano_fila;
-  formato = (char*)malloc(tamanoString*sizeof(char));
-  if (formato == NULL)
-  {
-      return NULL;
-  }
-  for(int i = 0;i< tamano_fila-1;i++)
-  {
-    formato = strcat(formato,"%f\t");
-  }
-  formato = strcat(formato,"%f\n");
-  return formato;
 }

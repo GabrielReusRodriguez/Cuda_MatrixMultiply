@@ -2,48 +2,107 @@
 #include <stdlib.h>
 #include "MemoryLib.h"
 #include "Constantes.h"
+#include <cuda_runtime.h>
 
 
-float** reservaMemoriaMatriz(int size_i, int size_j)
+
+//#define _CUDA(x) checkCudaErrors(x)
+/*
+int liberaMemoriaMatriz(Matrix matriz,MatrixSize size);
+Matrix reservaMemoriaMatriz(MatrixSize size);
+*/
+
+//http://codeofhonour.blogspot.com.es/2014/10/cuda-and-pointers-to-pointers.html
+//float** reservaMemoriaMatriz(int size_i, int size_j)
+//cudaHostAlloc((void**)&hst_ptr, 2*sizeof(float*), cudaHostAllocMapped) );
+/*
+Matrix reservaMemoriaMatriz(MatrixSize size)
 {
-    float** matriz=NULL;
-    if (size_i > 0 && size_j > 0)
+    Matrix matriz;
+    matriz.size = size;
+    if (matriz.size.i > 0 && matriz.size.j > 0)
     {
-      matriz = (float**)malloc(size_i*sizeof(float*));
-      if (matriz == NULL)
+      //matriz.matrixValues = (MatrixType**)malloc(matriz.size.i*sizeof(MatrixType*));
+      cudaHostAlloc((void**)&(matriz.matrixValues), matriz.size.i*sizeof(MatrixType*), cudaHostAllocMapped);
+      if (matriz.matrixValues == NULL)
       {
-        return NULL;
+        return matriz;
       }
-      for(int i=0;i<size_i;i++)
+      for(int i=0;i<matriz.size.i;i++)
       {
-          matriz[i] = (float*)malloc(size_j*sizeof(float));
-          if (matriz[i] == NULL)
+          //matriz.matrixValues[i] = (MatrixType*)malloc(matriz.size.j*sizeof(MatrixType));
+          cudaHostAlloc((void**)&(matriz.matrixValues[i]), matriz.size.j*sizeof(MatrixType), cudaHostAllocMapped);
+          if (matriz.matrixValues[i] == NULL)
           {
-            return NULL;
+            return matriz;
           }
-          for(int j=0;j<size_j;j++)
+          for(int j=0;j<matriz.size.j;j++)
           {
-            matriz[i][j] = 0.0f;
+            matriz.matrixValues[i][j] = MATRIX_CELL_INIT_VALUE;
           }
       }
       return matriz;
     }else{
-      return NULL;
+      return matriz;
     }
 
 }
 
-int liberaMemoriaMatriz(float** matriz,int size_i)
+*/
+
+Matrix reservaMemoriaMatriz(MatrixSize size)
 {
-  if (matriz == NULL)
+    Matrix matriz;
+    matriz.size = size;
+    if (matriz.size.i > 0 && matriz.size.j > 0)
+    {
+      //matriz.matrixValues = (MatrixType**)malloc(matriz.size.i*sizeof(MatrixType*));
+      //cudaHostAlloc((void**)&(matriz.matrixValues), matriz.size.i*sizeof(MatrixType*), cudaHostAllocMapped);
+      matriz.matrixValues = (MatrixType*)malloc(matriz.size.i*matriz.size.j*sizeof(MatrixType));
+      if (matriz.matrixValues == NULL)
+      {
+        return matriz;
+      }
+
+      for(int i=0;i<matriz.size.i;i++)
+      {
+          //matriz.matrixValues[i] = (MatrixType*)malloc(matriz.size.j*sizeof(MatrixType));
+          //cudaHostAlloc((void**)&(matriz.matrixValues[i]), matriz.size.j*sizeof(MatrixType), cudaHostAllocMapped);
+          for(int j=0;j<matriz.size.j;j++)
+          {
+            int index = i*matriz.size.j + j;
+            matriz.matrixValues[index] = MATRIX_CELL_INIT_VALUE;
+          }
+      }
+      return matriz;
+    }else{
+      return matriz;
+    }
+
+}
+
+int liberaMemoriaMatriz(Matrix matriz)
+{
+
+  if (matriz.matrixValues == NULL)
+  {
+    return 1;
+  }
+  free(matriz.matrixValues);
+
+  /*
+  if (matriz.matrixValues == NULL)
   {
     return 1;
   }
 
-  for(int i=0;i<size_i;i++)
+  for(int i=0;i<matriz.size.i;i++)
   {
-    free (matriz[i]);
+    //free (matriz.matrixValues[i]);
+    cudaFree(matriz.matrixValues[i]);
   }
-  free (matriz);
+  //free (matriz.matrixValues);
+  cudaFree(matriz.matrixValues);
   return RETURN_OK;
+  */
 }
