@@ -93,9 +93,25 @@ Matrix  leeFichero(ConstString fileName){
 }
 
 int escribeFichero(ConstString fileName, const Matrix matriz){
+  FILE *fp=NULL;
+  fp = fopen(fileName,"w");
+  if (fp == NULL)
+  {
+    return 1;
+  }
+  fprintf(fp,"%zd\t%zd\n",matriz.size.i,matriz.size.j);
+  for(int j=0;j<matriz.size.j;j++)
+  {
+    for(int i=0;i< matriz.size.i-1;i++)
+    {
+        int index = j*matriz.size.i+i;
+        fprintf(fp,"%f\t",matriz.matrixValues[index]);
+    }
+    int index = j*matriz.size.i+matriz.size.i-1;
+    fprintf(fp,"%f\n",matriz.matrixValues[index]);
+  }
 
-
-
+  fclose(fp);
   return RETURN_OK;
 
 }

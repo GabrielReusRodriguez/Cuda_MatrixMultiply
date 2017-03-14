@@ -26,7 +26,6 @@
       return RETURN_OK;
   }
 
-  //void printMatrix(float** Matrix,int size_i,int size_j)
   void printMatrix(Matrix matriz)
   {
 
@@ -37,11 +36,9 @@
       {
         for ( int i=0;i< matriz.size.i - 1; i++)
         {
-          //int index = i*matriz.size.j+j;
           int index = j*matriz.size.i+i;
           printf("%f\t",matriz.matrixValues[index]);
         }
-          //int index = i*matriz.size.j+ matriz.size.j-1;
           int index = j*matriz.size.i+ matriz.size.i-1;
           printf("%f\n",matriz.matrixValues[index]);
       }
@@ -50,23 +47,4 @@
   {
     printf("Tamanos de matriz = 0 o negativos");
   }
-
-    /*
-      if (matriz.size.i > 0 && matriz.size.j > 0)
-      {
-        printf("Matrix %zdx%zd:\n",matriz.size.i,matriz.size.j);
-        for(int i = 0; i < matriz.size.i; i++)
-        {
-          for ( int j=0;j< matriz.size.j - 1; j++)
-          {
-            printf("%f\t",matriz.matrixValues[i][j]);
-          }
-            printf("%f\n",matriz.matrixValues[i][matriz.size.j-1]);
-        }
-    }
-    else
-    {
-      printf("Tamanos de matriz = 0 o negativos");
-    }
-    */
-  }
+}
