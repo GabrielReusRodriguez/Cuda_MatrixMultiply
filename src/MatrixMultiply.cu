@@ -6,15 +6,42 @@
 #include "MatrixLib.h"
 #include "CudaFunctions.h"
 
-int main(void){
+int main(int argc, char** argv){
 
-	ConstString fileA = "./data/A.txt";
-	ConstString fileB = "./data/B.txt";
+	//ConstString fileA = "./data/A.txt";
+	//ConstString fileB = "./data/B.txt";
   //ConstString fileA = "./data/3x3.txt";
   //ConstString fileB = "./data/Identity.txt";
 
-	ConstString fileRes = "./data/Res.txt";
+	printf("argc: %d,\n",argc);
+	char* fileA = NULL;
+	char* fileB = NULL;
+	char* fileRes = NULL;
 
+	switch(argc){
+		case 3:
+			fileA = argv[1];
+			fileB = argv[2];
+		break;
+		case 4:
+			fileA = argv[1];
+			fileB = argv[2];
+			fileRes = argv[3];
+		break;
+		default:
+			printf("MatrixMultiply.cu <MatrixA> <MatrixB> [FileNameRes]\n");
+		break;
+	}
+	//ConstString fileRes = "./data/Res.txt";
+	/*ConstString fileA = "./data/genMatA.txt";
+	ConstString fileB = "./data/genMatB.txt";
+	ConstString fileRes = "./data/Res.txt";
+  */
+
+
+	getCudaProperties();
+
+	
 	Matrix h_matrizA;
 	Matrix h_matrizB;
 	Matrix h_matrizRes;
